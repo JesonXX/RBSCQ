@@ -5,90 +5,155 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>现场审计12组工作日报</title>
 <style>
-    @page { size: A4; margin: 2cm; }
-    body {
-        font-family: "STZhongsong","华文中宋","SimSun","宋体",serif;
-        font-size: 12pt; line-height: 1.5; margin: 0; padding: 0; color: #000;
-    }
+    @page { size: A4; margin: 0; }
+    html, body { margin:0; padding:0; height:100%; background:#fff; overflow:hidden; }
+    
     .page {
-        width: 21cm; min-height: 29.7cm; margin: 0 auto; padding: 2cm;
-        box-sizing: border-box; background-color: white;
-    }
-    .title {
-        text-align: center; font-size: 26pt; font-weight: bold; color: #f00;
-        margin-top: 0.5cm; margin-bottom: 0.5cm;
-    }
-    .header {
-        display: flex; justify-content: space-between;
-        font-family: "FangSong_GB2312","仿宋_GB2312","FangSong","仿宋",serif;
-        font-size: 16pt; font-weight: bold;
-        margin-top: 0.8cm; margin-bottom: 0.3cm;
-    }
-    .header-line {
-        width: 100%; height: 0; border-bottom: 1px solid #f00; margin-bottom: 0.8cm;
-    }
-    .section { margin-bottom: 0.8cm; }
-    .section-title {
-        font-family: "FangSong_GB2312","仿宋_GB2312","FangSong","仿宋",serif;
-        font-size: 16pt; font-weight: bold; margin-bottom: 0.3cm;
-    }
-    .content {
+        width: 210mm;
+        height: 297mm;
+        padding: 25.4mm 19mm 20mm 19mm;  /* 上25.4mm 左右19mm 下20mm（页码占位） */
+        box-sizing: border-box;
+        background: white;
         font-family: "FangSong_GB2312","仿宋_GB2312","FangSong","仿宋",serif;
         font-size: 16pt;
+        line-height: 1.95;
+        position: relative;
+        overflow: hidden;
     }
-    .editable {
-        border: none; padding: 5px; margin: 5px 0; min-height: 20px;
+    .title {
+        text-align: center;
+        font-size: 26pt;
+        font-weight: bold;
+        color: #C00000;
+        margin: 0 0 28mm 0;   /* 与原PDF完全一致 */
+        letter-spacing: 2pt;
+    }
+    .header {
+        display: flex;
+        justify-content: space-between;
+        font-size: 16pt;
+        font-weight: bold;
+        margin: 0 0 10mm 0;
+        line-height: 1;
+    }
+    .header-line {
+        border-bottom: 1.8pt solid #C00000;
+        margin: 0 0 28mm 0;   /* 红线下方空28mm */
+    }
+    .section-title {
+        font-weight: bold;
+        margin: 0 0 15mm 0;
+        font-size: 16pt;
+    }
+    .content p {
+        margin: 0 0 11.5mm 0; /* 每段间距11.5mm */
+        text-indent: 2em;
+        line-height: 1.95;
+    }
+    .content p:last-child { margin-bottom: 0; }
+    .page-number {
+        position: absolute;
+        bottom: 18mm;
+        right: 19mm;
+        font-size: 12pt;
+        color: #999999;
     }
     button {
-        margin: 10px; padding: 8px 16px; border: none; border-radius: 6px;
-        background-color: #f44336; color: white; font-size: 14pt; cursor: pointer;
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 999;
+        padding: 14px 40px;
+        background: #C00000;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 18pt;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(192,0,0,0.4);
     }
-    button:hover { background-color: #d32f2f; }
+    button:hover { background:#a00000; }
 </style>
 </head>
 <body>
+
 <div class="page" id="report">
     <div class="title">审计部工作日报</div>
+    
     <div class="header">
         <div>现场审计12组</div>
-        <div id="date" contenteditable="true"></div>
+        <div id="date" contenteditable="true" style="outline:none; min-width:120px; text-align:right;"></div>
     </div>
+    
     <div class="header-line"></div>
-    <div class="section">
-        <div class="section-title">一、今日工作</div>
-        <div class="content editable" contenteditable="true">
-            <p>1. 对盘山支行开展资产分类审计，复核审计工作底稿，整理审计档案资料。</p>
-            <p>2. 对盘锦中心支行开展案件防控审计，复核审计工作底稿，整理审计档案资料。</p>
-        </div>
+    
+    <div class="section-title">一、今日工作</div>
+    <div class="content" contenteditable="true" style="outline:none;">
+        <p>1.对盘山支行开展资产分类审计，复核审计工作底稿，整理审计档案资料，交回调阅的审计资料。</p>
+        <p>2.对盘锦中心支行开展案件防控审计，复核审计工作底稿，整理审计档案资料，交回调阅的审计资料。</p>
+        <p>3.按照审计团队工作要求，梳理阜新海州支行、阜新支行和营口鲅鱼圈支行全面审计中违规问题划分情况。</p>
     </div>
+    
+    <div class="page-number">- 1 -</div>
 </div>
 
-<div style="text-align:center;">
-    <button id="downloadBtn">下载 PDF</button>
-</div>
+<button id="downloadBtn">下载 PDF（完美单页）</button>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.2/html2pdf.bundle.min.js"></script>
 <script>
-// 自动填入日期
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
     const today = new Date();
-    const y = today.getFullYear(), m = today.getMonth()+1, d = today.getDate();
-    document.getElementById('date').textContent = `${y}年${m}月${d}日`;
+    document.getElementById('date').textContent = 
+        `${today.getFullYear()}年${(today.getMonth()+1)}月${today.getDate()}日`;
 });
 
-// 生成 PDF
-document.getElementById("downloadBtn").addEventListener("click", function() {
-    const element = document.getElementById("report");
-    const date = document.getElementById('date').textContent;
+document.getElementById('downloadBtn').onclick = () => {
+    const element = document.getElementById('report');
+    
+    // 强制精确尺寸
+    element.style.height = '297mm';
+    element.style.width = '210mm';
+    element.style.padding = '25.4mm 19mm 20mm 19mm';
+    element.style.boxSizing = 'border-box';
+    
     const opt = {
         margin: 0,
-        filename: `现场审计12组工作日报--${date}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'cm', format: 'a4', orientation: 'portrait' }
+        filename: `现场审计12组工作日报--${document.getElementById('date').textContent}.pdf`,
+        image: { type: 'jpeg', quality: 1 },
+        html2canvas: {
+            scale: 2,
+            useCORS: true,
+            letterRendering: true,
+            backgroundColor: '#ffffff',
+            windowWidth: 794,   // A4 @ 96dpi
+            windowHeight: 1123,
+            scrollX: 0,
+            scrollY: 0,
+            dpi: 300,
+            logging: false
+        },
+        jsPDF: { 
+            unit: 'mm', 
+            format: 'a4', 
+            orientation: 'portrait',
+            compress: true
+        }
     };
-    html2pdf().set(opt).from(element).save();
-});
+    
+    // 核心防空白+防多页
+    setTimeout(() => {
+        html2pdf().set(opt).from(element).toPdf().get('pdf').then(pdf => {
+            // 强制删除多余页
+            while(pdf.internal.getNumberOfPages() > 1) {
+                pdf.deletePage(pdf.internal.getNumberOfPages());
+            }
+            pdf.save();
+        }).catch(err => {
+            alert('生成失败：' + err.message);
+        });
+    }, 600);
+};
 </script>
 </body>
 </html>
