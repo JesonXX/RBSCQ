@@ -5,43 +5,33 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>现场审计12组工作日报</title>
 <style>
-    /* 核心修改点：为PDF内容区域设定固定尺寸，防止内容溢出 A4 页面 */
-    @page { size: A4; margin: 0; } /* 消除打印机的默认页边距 */
+    @page { size: A4; margin: 0; }  /* ✅ 去掉页面外边距 */
     body {
         font-family: "STZhongsong","华文中宋","SimSun","宋体",serif;
         font-size: 12pt; line-height: 1.5; margin: 0; padding: 0; color: #000;
-        background-color: #eee; /* 仅为查看效果 */
+        background-color: #fff;
     }
-    
-    /* 模拟 A4 页面尺寸 (21cm x 29.7cm) 并设置边距 */
     .page {
-        width: 21cm; 
-        min-height: 29.7cm; /* 确保最小高度为一页 A4 */
-        margin: 0 auto; 
-        padding: 2cm; /* 设置内容区域的内边距，即PDF的边距 */
-        box-sizing: border-box; 
-        background-color: white;
-        
-        /* 关键：限制最大高度，如果内容超出此高度，浏览器渲染可能会截断或压缩 */
-        /* A4 高度 29.7cm - 上下 2cm 边距 = 25.7cm */
-        max-height: 25.7cm; 
-        overflow: hidden; /* 隐藏溢出内容，强制在一页内 */
+        width: 21cm;
+        height: 29.7cm;              /* ✅ 固定 A4 高度，防止分页 */
+        margin: 0 auto;
+        padding: 1.5cm;              /* ✅ 控制页内边距 */
+        box-sizing: border-box;
     }
-
     .title {
         text-align: center; font-size: 26pt; font-weight: bold; color: #f00;
-        margin-top: 0; margin-bottom: 0.5cm; /* 减少顶部的 margin */
+        margin-top: 0.5cm; margin-bottom: 0.5cm;
     }
     .header {
         display: flex; justify-content: space-between;
         font-family: "FangSong_GB2312","仿宋_GB2312","FangSong","仿宋",serif;
         font-size: 16pt; font-weight: bold;
-        margin-top: 0.5cm; margin-bottom: 0.3cm; /* 稍微减少上边距 */
+        margin-top: 0.8cm; margin-bottom: 0.3cm;
     }
     .header-line {
-        width: 100%; height: 0; border-bottom: 1px solid #f00; margin-bottom: 0.6cm; /* 略微减少下边距 */
+        width: 100%; height: 0; border-bottom: 1px solid #f00; margin-bottom: 0.8cm;
     }
-    .section { margin-bottom: 0.6cm; /* 减少区块间距 */ }
+    .section { margin-bottom: 0.8cm; }
     .section-title {
         font-family: "FangSong_GB2312","仿宋_GB2312","FangSong","仿宋",serif;
         font-size: 16pt; font-weight: bold; margin-bottom: 0.3cm;
@@ -49,9 +39,6 @@
     .content {
         font-family: "FangSong_GB2312","仿宋_GB2312","FangSong","仿宋",serif;
         font-size: 16pt;
-    }
-    .content p {
-        margin: 0 0 0.5em 0; /* 调整段落间距 */
     }
     .editable {
         border: none; padding: 5px; margin: 5px 0; min-height: 20px;
@@ -78,7 +65,7 @@
             <p>2. 对盘锦中心支行开展案件防控审计，复核审计工作底稿，整理审计档案资料。</p>
         </div>
     </div>
-    </div>
+</div>
 
 <div style="text-align:center;">
     <button id="downloadBtn">下载 PDF</button>
@@ -97,22 +84,13 @@ document.addEventListener('DOMContentLoaded', function() {
 document.getElementById("downloadBtn").addEventListener("click", function() {
     const element = document.getElementById("report");
     const date = document.getElementById('date').textContent;
-    
-    // 获取内容实际宽度，用于精确控制 html2canvas
-    const contentWidth = element.offsetWidth - 2 * parseFloat(getComputedStyle(element).paddingLeft); 
-
     const opt = {
-        // 核心修改：设置 margin 为 0，让 CSS 中的 .page padding 控制边距
-        margin: 0, 
+        margin: [0, 0, 0, 0],
         filename: `现场审计12组工作日报--${date}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { 
-            scale: 2,
-            // 关键：强制设置 html2canvas 宽度为元素自身宽度
-            width: element.offsetWidth, 
-            windowWidth: element.offsetWidth 
-        },
-        jsPDF: { unit: 'cm', format: 'a4', orientation: 'portrait' }
+        image: { type: 'jpeg', quality: 1 },
+        html2canvas: { scale: 3, useCORS: true, scrollY: 0 },  // ✅ 高分辨率，避免多页
+        jsPDF: { unit: 'cm', format: 'a4', orientation: 'portrait' },
+        pagebreak: { mode: ['avoid'] } // ✅ 避免分页
     };
     html2pdf().set(opt).from(element).save();
 });
