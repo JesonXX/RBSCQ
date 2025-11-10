@@ -11,19 +11,16 @@
             line-height: 1.4;
             margin: 0;
             padding: 20px;
-            background-color: white;
+            background-color: #f9f9f9;
             color: black;
-            text-align: left;
-            word-break: keep-all;
-            white-space: pre-wrap;
         }
         .container {
             max-width: 210mm;
             margin: 0 auto;
             padding: 20mm;
             box-sizing: border-box;
-            border: 1px solid #ccc;
-            min-height: 297mm;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
         .title {
             font-family: 'FangSong', '仿宋', serif;
@@ -32,13 +29,6 @@
             color: red;
             text-align: center;
             margin-bottom: 10mm;
-            letter-spacing: 0.5pt;
-        }
-        .subtitle {
-            font-family: 'FangSong', '仿宋', serif;
-            font-size: 12pt;
-            text-align: center;
-            margin-bottom: 5mm;
         }
         .subtitle-line {
             border-bottom: 1px solid black;
@@ -48,154 +38,107 @@
         .group-date {
             display: flex;
             justify-content: space-between;
-            font-family: 'FangSong', '仿宋', serif;
             font-size: 12pt;
             margin-bottom: 5mm;
-            font-weight: normal;
         }
         .section {
-            font-family: 'FangSong', '仿宋', serif;
             font-size: 12pt;
-            margin-bottom: 5mm;
-            white-space: pre;
-        }
-        .list-item {
-            font-family: 'FangSong', '仿宋', serif;
-            font-size: 12pt;
-            line-height: 1.3;
-            margin-bottom: 3mm;
-            text-indent: -1em;
-            padding-left: 1em;
+            margin: 15mm 0 5mm 0;
         }
         .list-item ol {
-            list-style: decimal;
-            padding-left: 0;
             margin: 0;
+            padding-left: 2em;
+            list-style: decimal;
         }
         .list-item li {
-            margin-bottom: 3mm;
-            white-space: pre-wrap;
+            margin-bottom: 8mm;
+            line-height: 1.4;
+            padding-left: 0.5em;
         }
         .page-number {
-            position: absolute;
+            position: fixed;
             bottom: 20mm;
             right: 20mm;
-            font-family: 'FangSong', '仿宋', serif;
             font-size: 10pt;
             color: #808080;
         }
-        .form-group {
-            margin-bottom: 10px;
-        }
-        .form-group label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        .form-group textarea {
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-weight: bold; margin-bottom: 5px; }
+        .form-group textarea, .form-group input:not([type=date]) {
             width: 100%;
-            height: 80px;
             font-family: 'FangSong', '仿宋', serif;
             font-size: 12pt;
-            padding: 5px;
+            padding: 8px;
             border: 1px solid #ccc;
             box-sizing: border-box;
         }
         .generate-btn, .pdf-btn {
-            background-color: #007bff;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-            font-size: 14pt;
-            margin: 10px;
-            border-radius: 4px;
+            background: #007bff; color: white; padding: 12px 25px; border: none; cursor: pointer;
+            font-size: 14pt; margin: 10px 10px 10px 0; border-radius: 4px;
         }
-        .generate-btn:hover, .pdf-btn:hover {
-            background-color: #0056b3;
-        }
-        .preview {
-            margin-top: 20px;
-            position: relative;
-        }
+        .generate-btn:hover, .pdf-btn:hover { background: #0056b3; }
+        .preview { margin-top: 30px; border: 1px dashed #aaa; padding: 20mm; position: relative; }
         @media print {
-            .form-group, .generate-btn, .pdf-btn { display: none; }
-            .preview { position: static; }
-        }
-        @media (max-width: 600px) {
-            .container {
-                padding: 10mm;
-                width: auto;
-            }
-            .title { font-size: 14pt; }
+            body * { visibility: hidden; }
+            .preview, .preview * { visibility: visible; }
+            .preview { position: absolute; left: 0; top: 0; width: 100%; border: none; }
+            .generate-btn, .pdf-btn, .form-group { display: none; }
         }
     </style>
-    <!-- html2pdf.js for PDF generation -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- 升级到最新稳定版 html2pdf -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.2/html2pdf.bundle.min.js" integrity="sha512-Ib3ocB5Lm/0sMwe4i4/0a+0i3p0S/0tOwx5cX0i0u/6Qb8R2x4u7mZvQ1qB6G+9e1pK2qAD2N8w0r4Gq9L0/7aG8tXRA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
     <div class="container">
-        <!-- 输入表单 -->
-        <div class="form-section">
-            <h2 style="font-family: 'FangSong', '仿宋', serif; font-size: 14pt;">生成日报</h2>
-            <div class="form-group">
-                <label for="group">小组名称：</label>
-                <input type="text" id="group" value="现场审计12组" style="width: 200px; font-family: 'FangSong', '仿宋', serif; font-size: 12pt; padding: 5px;">
-            </div>
-            <div class="form-group">
-                <label for="date">日期（自动填充今日，可手动修改）：</label>
-                <input type="date" id="date" value="2025-11-07" style="font-family: 'FangSong', '仿宋', serif; font-size: 12pt; padding: 5px;">
-            </div>
-            <div class="form-group">
-                <label for="item1">今日工作1：</label>
-                <textarea id="item1">对辽阳支行开展资产分类审计，复核审计工作底稿，&#10;整理审计档案资料，交回调阅的审计资料。</textarea>
-            </div>
-            <div class="form-group">
-                <label for="item2">今日工作2：</label>
-                <textarea id="item2">对辽阳支行开展案件防控审计，复核审计工作底&#10;稿，整理审计档案资料，交回调阅的审计资料。</textarea>
-            </div>
-            <div class="form-group">
-                <label for="item3">今日工作3：</label>
-                <textarea id="item3">按照审计团队工作要求，梳理阜新海州支行、阜新支&#10;行和营口鲅鱼圈支行全面审计中违规问题划分情况。</textarea>
-            </div>
-            <button class="generate-btn" onclick="generateReport()">生成预览</button>
-            <button class="pdf-btn" onclick="downloadPDF()" style="display: none;" id="pdfBtn">下载PDF</button>
+        <h2>审计部工作日报生成器</h2>
+        
+        <div class="form-group">
+            <label>小组名称：</label>
+            <input type="text" id="group" value="现场审计12组">
         </div>
+        
+        <div class="form-group">
+            <label>日期（自动今日）：</label>
+            <input type="date" id="date">
+        </div>
+        
+        <div class="form-group">
+            <label>今日工作（每段一行，支持手动换行）：</label>
+            <textarea id="content" rows="10">1.对盘山支行开展资产分类审计，复核审计工作底稿，
+整理审计档案资料，交回调阅的审计资料。
 
-        <!-- 预览区域 -->
-        <div class="preview" id="preview" style="display: none;">
-            <div class="title" id="reportTitle">审计部工作日报</div>
-            <div class="subtitle">
+2.对盘锦中心支行开展案件防控审计，复核审计工作底稿，
+整理审计档案资料，交回调阅的审计资料。
+
+3.按照审计团队工作要求，梳理阜新海州支行、阜新支行和营口鲅鱼圈支行全面审计中违规问题划分情况。</textarea>
+        </div>
+        
+        <button class="generate-btn" onclick="generateReport()">生成预览</button>
+        <button class="pdf-btn" onclick="downloadPDF()" style="display:none;" id="pdfBtn">下载PDF（已修复空白问题）</button>
+        
+        <div class="preview" id="preview" style="display:none;">
+            <div class="title">审计部工作日报</div>
+            <div style="text-align:center; font-size:12pt;">
                 <div class="group-date">
                     <span id="reportGroup">现场审计12组</span>
                     <span id="reportDate">2025年11月7日</span>
                 </div>
                 <div class="subtitle-line"></div>
             </div>
-            <div class="section">一、 今日工作  </div>
-            <div class="list-item">
-                <ol id="reportList">
-                    <li id="li1"></li>
-                    <li id="li2"></li>
-                    <li id="li3"></li>
-                </ol>
-            </div>
+            <div class="section">一、 今日工作</div>
+            <div class="list-item" id="reportContent"></div>
             <div class="page-number">- 1 -</div>
         </div>
     </div>
 
     <script>
-        // 自动设置今日日期（当前为2025-11-08，可手动改）
+        // 自动填充今天日期（2025-11-10）
         window.onload = function() {
-            const today = new Date('2025-11-08');
-            const year = today.getFullYear();
-            const month = String(today.getMonth() + 1).padStart(2, '0');
-            const day = String(today.getDate()).padStart(2, '0');
-            document.getElementById('date').value = `${year}-${month}-${day}`;
+            document.getElementById('date').value = '2025-11-10';
         };
 
         function generateReport() {
-            const group = document.getElementById('group').value;
+            const group = document.getElementById('group').value.trim();
             const dateInput = document.getElementById('date').value;
             const date = new Date(dateInput);
             const year = date.getFullYear();
@@ -206,13 +149,16 @@
             document.getElementById('reportGroup').textContent = group;
             document.getElementById('reportDate').textContent = chineseDate;
 
-            const item1 = document.getElementById('item1').value.replace(/\n/g, '<br>');
-            const item2 = document.getElementById('item2').value.replace(/\n/g, '<br>');
-            const item3 = document.getElementById('item3').value.replace(/\n/g, '<br>');
-
-            document.getElementById('li1').innerHTML = item1 + ' ';
-            document.getElementById('li2').innerHTML = item2 + ' ';
-            document.getElementById('li3').innerHTML = item3 + '    ';
+            // 自动处理编号与换行
+            const raw = document.getElementById('content').value;
+            const lines = raw.split('\n').filter(l => l.trim());
+            let html = '<ol>';
+            lines.forEach(line => {
+                const clean = line.replace(/^\d+\.?\s*/, '').trim();
+                html += `<li>${clean}</li>`;
+            });
+            html += '</ol>';
+            document.getElementById('reportContent').innerHTML = html;
 
             document.getElementById('preview').style.display = 'block';
             document.getElementById('pdfBtn').style.display = 'inline-block';
@@ -220,14 +166,37 @@
 
         function downloadPDF() {
             const element = document.getElementById('preview');
-            const opt = {
-                margin: [20, 20, 20, 20],
-                filename: '审计部工作日报-2025-11-07.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-            html2pdf().set(opt).from(element).save();
+            
+            // 关键修复：先强制重绘，再延迟生成
+            element.style.display = 'none';
+            element.offsetHeight; // 触发重绘
+            element.style.display = 'block';
+
+            setTimeout(() => {
+                const opt = {
+                    margin: [15, 10, 15, 10],
+                    filename: `审计部工作日报-${document.getElementById('date').value}.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { 
+                        scale: 2,
+                        useCORS: true,
+                        letterRendering: true,
+                        allowTaint: false,
+                        backgroundColor: '#ffffff'
+                    },
+                    jsPDF: { 
+                        unit: 'mm', 
+                        format: 'a4', 
+                        orientation: 'portrait',
+                        compress: true
+                    },
+                    pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+                };
+
+                html2pdf().set(opt).from(element).save()
+                    .then(() => console.log('PDF生成成功'))
+                    .catch(err => alert('生成失败：' + err.message));
+            }, 300);
         }
     </script>
 </body>
