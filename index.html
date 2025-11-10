@@ -1,5 +1,10 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>现场审计12组工作日报</title>
 <style>
-    /* 打印设置 */
     @page { size: A4; margin: 0; }
 
     body {
@@ -12,12 +17,11 @@
         color: #000;
     }
 
-    /* 页面固定为A4大小：宽794px × 高1123px（≈21×29.7cm） */
     .page {
         width: 794px;
         height: 1123px;
         margin: 0 auto;
-        padding: 80px; /* 四周留白 */
+        padding: 80px;
         box-sizing: border-box;
         background-color: white;
     }
@@ -51,7 +55,7 @@
         margin-bottom: 25px;
     }
 
-    /* ✅ 标题也缩进两个中文字符 */
+    /* ✅ 标题缩进两个中文字符 */
     .section-title {
         font-family: "FangSong_GB2312","仿宋_GB2312","FangSong","仿宋",serif;
         font-size: 16pt;
@@ -60,12 +64,11 @@
         text-indent: 2em;
     }
 
+    /* ✅ 内容缩进两个中文字符 */
     .content {
         font-family: "FangSong_GB2312","仿宋_GB2312","FangSong","仿宋",serif;
         font-size: 16pt;
     }
-
-    /* ✅ 每段文字首行缩进两个中文字符 */
     .content p {
         text-indent: 2em;
         margin: 0 0 10px 0;
@@ -92,3 +95,56 @@
         background-color: #d32f2f;
     }
 </style>
+</head>
+<body>
+<div class="page" id="report">
+    <div class="title">审计部工作日报</div>
+    <div class="header">
+        <div>现场审计12组</div>
+        <div id="date" contenteditable="true"></div>
+    </div>
+    <div class="header-line"></div>
+
+    <div class="section">
+        <div class="section-title">一、今日工作。</div>
+        <div class="content editable" contenteditable="true">
+            <p>1. 对盘山支行开展资产分类审计，复核审计工作底稿，整理审计档案资料。</p>
+            <p>2. 对盘锦中心支行开展案件防控审计，复核审计工作底稿，整理审计档案资料。</p>
+        </div>
+    </div>
+</div>
+
+<div style="text-align:center;">
+    <button id="downloadBtn">下载 PDF</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const today = new Date();
+    const y = today.getFullYear(), m = today.getMonth()+1, d = today.getDate();
+    document.getElementById('date').textContent = `${y}年${m}月${d}日`;
+});
+
+document.getElementById("downloadBtn").addEventListener("click", function() {
+    const element = document.getElementById("report");
+    const date = document.getElementById('date').textContent;
+    const opt = {
+        margin: 0,
+        filename: `现场审计12组工作日报--${date}.pdf`,
+        image: { type: 'jpeg', quality: 1 },
+        html2canvas: {
+            scale: 2,
+            useCORS: true,
+            scrollY: 0,
+            windowWidth: element.scrollWidth,
+            windowHeight: element.scrollHeight
+        },
+        jsPDF: { unit: 'px', format: [794, 1123], orientation: 'portrait' },
+        pagebreak: { mode: ['avoid'] }
+    };
+    html2pdf().set(opt).from(element).save();
+});
+</script>
+</body>
+</html>
